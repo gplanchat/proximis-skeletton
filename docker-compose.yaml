@@ -1,0 +1,29 @@
+version: '2'
+
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.12.1
+    ports:
+      - ${ELASTICSEARCH_PORT:-9200}:9200
+    environment:
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    volumes:
+      - elasticsearch:/usr/share/elasticsearch/data
+      - ./.docker/elasticsearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+    restart: on-failure
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.12.1
+    ports:
+      - ${KIBANA_PORT:-5601}:5601
+    environment:
+      - monitoring.elasticsearch.hosts=http://elasticsearch:9200
+    volumes:
+      - ./.docker/kibana/kibana.yml:/usr/share/kibana/config/kibana.yml
+    restart: on-failure
+    depends_on:
+      - elasticsearch
+
+volumes:
+  elasticsearch:
+    driver: local

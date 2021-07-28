@@ -1,0 +1,25 @@
+{
+    "name": "kiboko/middleware-akeneo-proximis",
+    "description": "Akeneo to Proximis middleware",
+    "type": "project",
+    "require": {
+        "php": ">=8.0",
+        "php-etl/satellite": "dev-feature/use-basename",
+        "php-etl/array-expression-language": "dev-feature/add-array-filter as 0.1.0",
+        "php-etl/akeneo-expression-language": "dev-feature/format-metric as 0.2.x-dev",
+        "php-etl/string-expression-language": "dev-feature/add-trim-function as 0.1.0",
+        "php-etl/akeneo-plugin": "dev-feature/fix-and-change-download-config as 0.3.x-dev",
+        "php-etl/sql-plugin": "0.1.x-dev"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Kiboko",
+            "email": "hello@kiboko.fr"
+        }
+    ],
+    "config": {
+        "bin-dir": "bin"
+    },
+    "minimum-stability": "dev"
+}
