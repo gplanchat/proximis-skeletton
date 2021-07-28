@@ -1,0 +1,133 @@
+satellite:
+  filesystem:
+    path: build
+  composer:
+    require:
+      - "php-etl/pipeline:^0.3"
+      - "php-etl/fast-map:^0.2"
+      - "php-etl/csv-flow:^0.2"
+      - "akeneo/api-php-client-ee"
+      - "diglin/sylius-api-php-client"
+      - "laminas/laminas-diactoros"
+      - "php-http/guzzle7-adapter"
+      - "monolog/monolog"
+      - "elasticsearch/elasticsearch"
+  pipeline:
+    steps:
+      - akeneo:
+          enterprise: false
+          extractor:
+            type: product
+            method: all
+          client:
+            api_url: '@=env("AKENEO_API_URL")'
+            client_id: '@=env("AKENEO_CLIENT_ID")'
+            secret: '@=env("AKENEO_CLIENT_SECRET")'
+            username: '@=env("AKENEO_USERNAME")'
+            password: '@=env("AKENEO_PASSWORD")'
+        logger:
+          channel: pipeline
+          destinations:
+            - elasticsearch:
+                level: notice
+                hosts:
+                  - '@=env("ELASTICSEARCH_URL")'
+      - fastmap:
+          expression_language:
+            - 'Kiboko\Component\ExpressionLanguage\Akeneo\AkeneoFilterProvider'
+            - 'Kiboko\Component\ArrayExpressionLanguage\ArrayExpressionLanguageProvider'
+          map:
+            - field: '[image_1]'
+              expression: 'attribute(input["values"]["image_1"])'
+            - field: '[image_2]'
+              expression: 'attribute(input["values"]["image_2"])'
+            - field: '[image_3]'
+              expression: 'attribute(input["values"]["image_3"])'
+            - field: '[image_4]'
+              expression: 'attribute(input["values"]["image_4"])'
+            - field: '[image_5]'
+              expression: 'attribute(input["values"]["image_5"])'
+      - akeneo:
+          lookup:
+            conditional:
+              - condition: '@=input["image_1"]'
+                type: productMediaFile
+                method: download
+                file: '@=input["image_1"]'
+                merge:
+                  map:
+                    - field: "[image_file_1]"
+                      expression: 'temporaryFile(lookup)'
+              - condition: '@=input["image_2"]'
+                type: productMediaFile
+                method: download
+                file: '@=input["image_2"]'
+                merge:
+                  map:
+                    - field: "[image_file_2]"
+                      expression: 'temporaryFile(lookup)'
+              - condition: '@=input["image_3"]'
+                type: productMediaFile
+                method: download
+                file: '@=input["image_3"]'
+                merge:
+                  map:
+                    - field: "[image_file_3]"
+                      expression: 'temporaryFile(lookup)'
+              - condition: '@=input["image_4"]'
+                type: productMediaFile
+                method: download
+                file: '@=input["image_4"]'
+                merge:
+                  map:
+                    - field: "[image_file_4]"
+                      expression: 'temporaryFile(lookup)'
+              - condition: '@=input["image_5"]'
+                type: productMediaFile
+                method: download
+                file: '@=input["image_5"]'
+                merge:
+                  map:
+                    - field: "[image_file_5]"
+                      expression: 'temporaryFile(lookup)'
+          client:
+            api_url: '@=env("AKENEO_API_URL")'
+            client_id: '@=env("AKENEO_CLIENT_ID")'
+            secret: '@=env("AKENEO_CLIENT_SECRET")'
+            username: '@=env("AKENEO_USERNAME")'
+            password: '@=env("AKENEO_PASSWORD")'
+      - ftp:
+          loader:
+            servers:
+              - host: '@=env("FTP_HOST")'
+                username: '@=env("FTP_USERNAME")'
+                password: '@=env("FTP_PASSWORD")'
+                base_path: '@=env("FTP_PATH")'
+            put:
+              - path: '@=input["image_1"]'
+                content: '@=input["image_file_1"]'
+                mode: 420
+                if: '@=input["image_1"] !== null'
+              - path: '@=input["image_2"]'
+                content: '@=input["image_file_2"]'
+                mode: 420
+                if: '@=input["image_2"] !== null'
+              - path: '@=input["image_3"]'
+                content: '@=input["image_file_3"]'
+                mode: 420
+                if: '@=input["image_3"] !== null'
+              - path: '@=input["image_4"]'
+                content: '@=input["image_file_4"]'
+                mode: 420
+                if: '@=input["image_4"] !== null'
+              - path: '@=input["image_5"]'
+                content: '@=input["image_file_5"]'
+                mode: 420
+                if: '@=input["image_5"] !== null'
+        logger:
+          channel: pipeline
+          destinations:
+            - elasticsearch:
+                level: notice
+                hosts:
+                  - '@=env("ELASTICSEARCH_URL")'
