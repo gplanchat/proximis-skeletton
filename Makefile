@@ -48,144 +48,144 @@ vendor: composer.json
 
 install: vendor composer.lock
 
-src/cli-pipeline-akeneo-to-csv-%/build:
+src/%/build: src/%/satellite.yaml
 	@echo "\${GREEN}- Build and start $* pipeline\${NC}"
-	$(BUILD) src/cli-pipeline-akeneo-to-csv-$*/satellite.yaml
+	$(BUILD) src/$*/satellite.yaml
 
-src/cli-pipeline-akeneo-to-csv-%/simple/build:
-	@echo "\${GREEN}- Build and start $* (simple) pipeline\${NC}"
-	$(BUILD) src/cli-pipeline-akeneo-to-csv-$*/simple/satellite.yaml
+src/%/simple/build: src/%/satellite.yaml
+	@echo "\${GREEN}- Build and start $* (for products and variants) pipeline\${NC}"
+	$(BUILD) src/$*/simple/satellite.yaml
 
-src/cli-pipeline-akeneo-to-csv-%/model/build:
-	@echo "\${GREEN}- Build and start $* (model) pipeline\${NC}"
-	$(BUILD) src/cli-pipeline-akeneo-to-csv-$*/model/satellite.yaml
+src/%/model/build: src/%/satellite.yaml
+	@echo "\${GREEN}- Build and start $* (for product models) pipeline\${NC}"
+	$(BUILD) src/$*/model/satellite.yaml
 
 .PHONY: build-benefications
 build-benefications: ## Build benefications pipeline
-build-benefications: src/cli-pipeline-akeneo-to-csv-benefications/build
+build-benefications: src/benefications/build
 
 .PHONY: clean-benefications
 clean-benefications: ## Clean benefications pipeline generated code
 clean-benefications:
-	rm -rf src/cli-pipeline-akeneo-to-csv-benefications/build
+	rm -rf src/benefications/build
 
 .PHONY: benefications
 benefications: ## Run benefications pipeline
-benefications: src/cli-pipeline-akeneo-to-csv-benefications/build
-	php src/cli-pipeline-akeneo-to-csv-benefications/build/function.php
+benefications: src/benefications/build
+	php src/benefications/build/function.php
 
 .PHONY: build-brand
 build-brand: ## Build brand pipeline
-build-brand: src/cli-pipeline-akeneo-to-csv-brand/build
+build-brand: src/brand/build
 
 .PHONY: clean-brand
 clean-brand: ## Clean brand pipeline generated code
 clean-brand:
-	rm -rf src/cli-pipeline-akeneo-to-csv-brand/build
+	rm -rf src/brand/build
 
 .PHONY: brand
 brand: ## Run brand pipeline
-brand: src/cli-pipeline-akeneo-to-csv-brand/build
-	php src/cli-pipeline-akeneo-to-csv-brand/build/function.php
+brand: src/brand/build
+	php src/brand/build/function.php
 
 .PHONY: build-collection
 build-collection: ## Build collection pipeline
-build-collection: src/cli-pipeline-akeneo-to-csv-collection/build
+build-collection: src/collection/build
 
 .PHONY: clean-collection
 clean-collection: ## Clean collection pipeline generated code
 clean-collection:
-	rm -rf src/cli-pipeline-akeneo-to-csv-collection/build
+	rm -rf src/collection/build
 
 .PHONY: collection
 collection: ## Run collection pipeline
-collection: src/cli-pipeline-akeneo-to-csv-collection/build
-	php src/cli-pipeline-akeneo-to-csv-collection/build/function.php
+collection: src/collection/build
+	php src/collection/build/function.php
 
 .PHONY: build-cross-selling
 build-cross-selling: ## Build cross-selling pipeline
-build-cross-selling: src/cli-pipeline-akeneo-to-csv-cross-selling/simple/build src/cli-pipeline-akeneo-to-csv-cross-selling/model/build
+build-cross-selling: src/cross-selling/simple/build src/cross-selling/model/build
 
 .PHONY: clean-cross-selling
 clean-cross-selling: ## Clean cross-selling pipeline generated code
 clean-cross-selling:
-	rm -rf src/cli-pipeline-akeneo-to-csv-cross-selling/simple/build src/cli-pipeline-akeneo-to-csv-cross-selling/model/build
+	rm -rf src/cross-selling/simple/build src/cross-selling/model/build
 
 .PHONY: cross-selling
 cross-selling: ## Run cross-selling pipeline
-cross-selling: src/cli-pipeline-akeneo-to-csv-cross-selling/build
-	php src/cli-pipeline-akeneo-to-csv-cross-selling/model/build/function.php
-	php src/cli-pipeline-akeneo-to-csv-cross-selling/simple/build/function.php
+cross-selling: src/cross-selling/build
+	php src/cross-selling/model/build/function.php
+	php src/cross-selling/simple/build/function.php
 
 .PHONY: build-files
 build-files: ## Build files pipeline
-build-files: src/cli-pipeline-akeneo-to-csv-files/simple/build src/cli-pipeline-akeneo-to-csv-files/model/build
+build-files: src/files/simple/build src/files/model/build
 
 .PHONY: clean-files
 clean-files: ## Clean files pipeline generated code
 clean-files:
-	rm -rf src/cli-pipeline-akeneo-to-csv-files/simple/build src/cli-pipeline-akeneo-to-csv-files/model/build
+	rm -rf src/files/simple/build src/files/model/build
 
 .PHONY: files
 files: ## Run files pipeline
-files: src/cli-pipeline-akeneo-to-csv-files/build
-	php src/cli-pipeline-akeneo-to-csv-files/model/build/function.php
-	php src/cli-pipeline-akeneo-to-csv-files/simple/build/function.php
+files: src/files/build
+	php src/files/model/build/function.php
+	php src/files/simple/build/function.php
 
 .PHONY: build-images
 build-images: ## Build images pipeline
-build-images: src/cli-pipeline-akeneo-to-csv-images/simple/build src/cli-pipeline-akeneo-to-csv-images/model/build
+build-images: src/images/simple/build src/images/model/build
 
 .PHONY: clean-images
 clean-images: ## Clean images pipeline generated code
 clean-images:
-	rm -rf src/cli-pipeline-akeneo-to-csv-images/simple/build src/cli-pipeline-akeneo-to-csv-images/model/build
+	rm -rf src/images/simple/build src/images/model/build
 
 .PHONY: images
 images: ## Run images pipeline
-images: src/cli-pipeline-akeneo-to-csv-images/simple/build src/cli-pipeline-akeneo-to-csv-images/model/build
-	php src/cli-pipeline-akeneo-to-csv-images/model/build/function.php
-	php src/cli-pipeline-akeneo-to-csv-images/simple/build/function.php
+images: src/images/simple/build src/images/model/build
+	php src/images/model/build/function.php
+	php src/images/simple/build/function.php
 
 .PHONY: build-product
 build-product: ## Build product pipeline
-build-product: src/cli-pipeline-akeneo-to-csv-product/simple/build src/cli-pipeline-akeneo-to-csv-product/model/build
+build-product: src/product/simple/build src/product/model/build
 
 .PHONY: clean-product
 clean-product: ## Clean product pipeline generated code
 clean-product:
-	rm -rf src/cli-pipeline-akeneo-to-csv-product/simple/build src/cli-pipeline-akeneo-to-csv-product/model/build
+	rm -rf src/product/simple/build src/product/model/build
 
 .PHONY: product
 product: ## Run product pipeline
-product: src/cli-pipeline-akeneo-to-csv-product/simple/build src/cli-pipeline-akeneo-to-csv-product/model/build
-	php src/cli-pipeline-akeneo-to-csv-product/model/build/function.php
-	php src/cli-pipeline-akeneo-to-csv-product/simple/build/function.php
+product: src/product/simple/build src/product/model/build
+	php src/product/model/build/function.php
+	php src/product/simple/build/function.php
 
 .PHONY: build-section
 build-section: ## Build section pipeline
-build-section: src/cli-pipeline-akeneo-to-csv-section/build
+build-section: src/section/build
 
 .PHONY: clean-section
 clean-section: ## Clean section pipeline generated code
 clean-section:
-	rm -rf src/cli-pipeline-akeneo-to-csv-section/build
+	rm -rf src/section/build
 
 .PHONY: section
 section: ## Run section pipeline
-section: src/cli-pipeline-akeneo-to-csv-section/build
-	php src/cli-pipeline-akeneo-to-csv-section/build/function.php
+section: src/section/build
+	php src/section/build/function.php
 
 .PHONY: build-sku
 build-sku: ## Build sku pipeline
-build-sku: src/cli-pipeline-akeneo-to-csv-sku/build
+build-sku: src/sku/build
 
 .PHONY: clean-sku
 clean-sku: ## Clean sku pipeline generated code
 clean-sku:
-	rm -rf src/cli-pipeline-akeneo-to-csv-sku/build
+	rm -rf src/sku/build
 
 .PHONY: sku
 sku: ## Run sku pipeline
-sku: src/cli-pipeline-akeneo-to-csv-sku/build
-	php src/cli-pipeline-akeneo-to-csv-sku/build/function.php
+sku: src/sku/build
+	php src/sku/build/function.php

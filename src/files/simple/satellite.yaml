@@ -102,7 +102,7 @@ satellite:
               - host: '@=env("FTP_HOST")'
                 username: '@=env("FTP_USERNAME")'
                 password: '@=env("FTP_PASSWORD")'
-                base_path: '@=env("FTP_PATH")'
+                base_path: '@=env("FTP_PATH")~"/files"'
             put:
               - path: '@=input["document_1"]'
                 content: '@=input["document_file_1"]'
